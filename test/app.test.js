@@ -10,7 +10,7 @@ const { User } = require('../models');
 const { faker } = require('@faker-js/faker');
 const { createRandomUser } = require('../utils');
 
-test home route
+// test home route
 describe('GET /', () => {
     it('returns a 200 response', (done) => {
         request(app).get('/')
