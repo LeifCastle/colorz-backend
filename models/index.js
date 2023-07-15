@@ -7,6 +7,7 @@ const Post = require('./post');
 const Product = require('./product');
 const Order = require('./order');
 const Theme = require('./theme');
+const Favorite = require('./favorite');
 
 console.log('mongo uri =>', process.env.MONGO_URI);
 
@@ -35,4 +36,5 @@ module.exports = {
     Product,
     Order,
     Theme,
+    Favorite,
 }
