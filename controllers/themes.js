@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 // import the Theme model
-const { Theme } = require("../models");
+const { User, Theme } = require("../models");
 
 // GET make a themes route to get all themes
 router.get("/", (req, res) => {
@@ -22,36 +22,35 @@ router.get("/", (req, res) => {
 
 // POST route /themes/new - create a new theme
 router.post("/new", (req, res) => {
-  // read the req.body - data for the new theme coming in at
-  console.log("data from request (theme)", req.body); // object
+  console.log(`Data request by ${req.body.user} ===>`, req.body);
 
-  // create a theme
-  Theme.create({
-    name: req.body.name,
-    backgroundColor: req.body.backgroundColor,
-  })
-    .then((theme) => {
-      console.log("new theme created ->", theme);
+  //----Find the user
+  User.findOne({ email: req.body.user })
+    .then((user) => {
+      //--Create a new theme document
+      const theme = new Theme({
+        name: req.body.name,
+        backgroundColor: req.body.backgroundColor,
+        elements: [],
+      });
+
+      //--Populate embedded element document with the theme's elements
       req.body.elements.forEach((element) => {
         theme.elements.push(element); //Pushes an object with data matching element schema
       });
+
+      //--Save and populate models
       theme.save().then((newTheme) => {
-        newTheme
-          .populate("elements")
-          .then((result) => {
-            console.log(`Result: ${result}`);
-            res.header("Access-Control-Allow-Origin", "*");
-            return res.json({ theme: newTheme });
-          })
-          .catch((error) => {
-            res.json(`Error populating theme with elements: ${error}`);
-          });
+        user.themes.push(newTheme);
+        user.save().then((updatedUser) => {
+          res.header("Access-Control-Allow-Origin", "*");
+          console.log(`${req.body.user}'s new theme: `, updatedUser);
+          return res.json({ updatedUser });
+        });
       });
     })
     .catch((error) => {
-      console.log("error", error);
-      res.header("Access-Control-Allow-Origin", "*");
-      return res.json({ message: "error occured, please try again." });
+      console.log(`Error finding user: ${error}`);
     });
 });
 
