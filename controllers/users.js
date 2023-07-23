@@ -182,16 +182,18 @@ router.put("/:id", (req, res) => {
     });
 });
 
+//-------------Not implemented yet----------------\\
+
 // DELETE route for /users/:id
-router.delete("/:id", (req, res) => {
-  User.findByIdAndDelete(req.params.id)
-    .then((result) => {
-      return res.json({ message: `user at ${req.params.id} was delete` });
-    })
-    .catch((error) => {
-      console.log("error inside DELETE /users/:id", error);
-      return res.json({ message: "error occured, please try again." });
-    });
-});
+// router.delete("/:id", (req, res) => {
+//   User.findByIdAndDelete(req.params.id)
+//     .then((result) => {
+//       return res.json({ message: `user at ${req.params.id} was delete` });
+//     })
+//     .catch((error) => {
+//       console.log("error inside DELETE /users/:id", error);
+//       return res.json({ message: "error occured, please try again." });
+//     });
+// });
 
 module.exports = router;
