@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-//--Element Schema
+// create the element schema
 const elementSchema = new mongoose.Schema(
   {
     type: String,
@@ -15,6 +15,16 @@ const elementSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// create the theme schema
+const themeSchema = new mongoose.Schema(
+  {
+    name: String,
+    backgroundColor: String,
+    elements: [elementSchema],
+  },
+  { timestamps: true }
+);
+
 //--User Schema (embeded themeSchema)
 const userSchema = new mongoose.Schema(
   {
@@ -22,12 +32,7 @@ const userSchema = new mongoose.Schema(
     lastName: String,
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    themes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Theme",
-      },
-    ],
+    themes: [themeSchema],
   },
   { timestamps: true }
 );
@@ -37,3 +42,8 @@ const User = mongoose.model("User", userSchema);
 
 //--Export User model
 module.exports = User;
+
+// {
+//   type: mongoose.Schema.Types.ObjectId,
+//   ref: "Theme",
+// },
