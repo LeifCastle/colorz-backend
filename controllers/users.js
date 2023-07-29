@@ -27,10 +27,10 @@ router.get("/", (req, res) => {
 
 // GET route provides user profile data
 router.get(
-  "/profile",
+  "/account",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("====> inside /profile");
+    console.log("====> inside /account");
     console.log(req.body);
     console.log("====> user");
     console.log(req.user);

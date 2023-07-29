@@ -6,12 +6,12 @@ const router = express.Router();
 const { User, Theme } = require("../models");
 
 // GET make a themes route to get all themes
-router.get("/", (req, res) => {
-  Theme.find({})
-    .then((themes) => {
-      console.log("themes", themes);
+router.get("/:email", (req, res) => {
+  User.findOne({ email: req.params.email })
+    .then((user) => {
+      console.log("themes", user.themes);
       res.header("Access-Control-Allow-Origin", "*");
-      res.json({ themes: themes });
+      res.json(user.themes);
     })
     .catch((error) => {
       console.log("error", error);
@@ -27,26 +27,19 @@ router.post("/new", (req, res) => {
   //----Find the user
   User.findOne({ email: req.body.user })
     .then((user) => {
-      //--Create a new theme document
-      const theme = new Theme({
+      //--Create a new theme object
+      let newTheme = {
         name: req.body.name,
         backgroundColor: req.body.backgroundColor,
-        elements: [],
-      });
-
-      //--Populate embedded element document with the theme's elements
-      req.body.elements.forEach((element) => {
-        theme.elements.push(element); //Pushes an object with data matching element schema
-      });
-
-      //--Save and populate models
-      theme.save().then((newTheme) => {
-        user.themes.push(newTheme);
-        user.save().then((updatedUser) => {
-          res.header("Access-Control-Allow-Origin", "*");
-          console.log(`${req.body.user}'s new theme: `, updatedUser);
-          return res.json({ updatedUser });
-        });
+        elements: [...req.body.elements],
+      };
+      //--Push the theme object to the embeded theme array
+      user.themes.push(newTheme);
+      //--Save and populate user model
+      user.save().then((updatedUser) => {
+        res.header("Access-Control-Allow-Origin", "*");
+        console.log(`${req.body.user}'s new theme: `, updatedUser);
+        return res.json({ updatedUser });
       });
     })
     .catch((error) => {
