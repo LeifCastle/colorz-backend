@@ -2,12 +2,13 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const { MONGO_URI } = process.env;
 
 // import the Theme model
 const { User, Theme } = require("../models");
 
 // connect to the database
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(MONGO_URI || "http://localhost:8000", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
