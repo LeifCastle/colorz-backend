@@ -5,16 +5,7 @@ const mongoose = require("mongoose");
 const { MONGO_URI } = process.env;
 
 // import the Theme model
-const { User, Theme } = require("../models");
-
-// connect to the database
-mongoose.connect(MONGO_URI || "http://localhost:8000", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-// create connection object
-const db = mongoose.connection;
+const { User } = require("../models");
 
 // GET make a themes route to get all themes
 router.get("/:email", (req, res) => {

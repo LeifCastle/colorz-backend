@@ -42,8 +42,3 @@ const User = mongoose.model("User", userSchema);
 
 //--Export User model
 module.exports = User;
-
-// {
-//   type: mongoose.Schema.Types.ObjectId,
-//   ref: "Theme",
-// },
